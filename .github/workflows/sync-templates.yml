@@ -80,6 +80,7 @@ jobs:
                   git clone https://github.com/${repository} ${output_clone}
 
                   cd ${output_clone}
+                  git fetch origin
                   git remote add template https://github.com/${TEMPLATE_REPO}
                   git fetch template
 
