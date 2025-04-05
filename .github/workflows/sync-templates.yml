@@ -42,6 +42,8 @@ jobs:
             # Read and parse the configuration file
             TEMPLATE_REPO=$(jq -rc '.template_repository' "$CONFIG_FILE")
             ALL_REPOSITORIES=($(jq -rc '.repositories[]' "$CONFIG_FILE"))
+            TEMPLATE_BRANCH=$(jq -rc '.template_branch' "$CONFIG_FILE")
+            TARGET_BRANCH=$(jq -rc '.target_branch' "$CONFIG_FILE")
             
             ORGANIZATIONS=($(jq -rc '.organizations[]' "$CONFIG_FILE"))
             for organization in "${ORGANIZATIONS[@]}"; do
@@ -66,12 +68,29 @@ jobs:
                 
                 for repository in "${REPOSITORIES[@]}"; do
                   REPO_INFO=$(gh api "/repos/${repository}")
-                  git clone https://github.com/${repository} to-synced
+                  
                   if [[ "$(echo "$REPO_INFO" | jq -r '.template_repository.full_name')" == "${TEMPLATE_REPO}" ]]; then
                     REPO_NAME=$(echo "$REPO_INFO" | jq -rc '.full_name')
                     ALL_REPOSITORIES+=("${REPO_NAME}")
+                    continue
                   fi
-                  rm -rf to-synced              
+
+                  # Check if the repo is forked from template
+                  output_clone=$(echo "$repository" | sed -i 's/\//_/g')
+                  git clone ${repository} ${output_clone}
+
+                  cd ${output_clone}
+                  git remote add template https://github.com/${TEMPLATE_REPO}
+                  git fetch template
+
+                  if [[ $(git merge-base ${TARGET_BRANCH} template/${TEMPLATE_BRANCH}) ]]; then
+                    REPO_NAME=$(echo "$REPO_INFO" | jq -rc '.full_name')
+                    echo "Adding ${REPO_NAME}"
+                    ALL_REPOSITORIES+=("${REPO_NAME}")
+                    cd ..
+                    continue
+                  fi
+                  cd ..
                 done
 
                 ((PAGE++))
