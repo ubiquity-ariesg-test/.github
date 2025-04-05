@@ -74,6 +74,7 @@ jobs:
                   OUTPUT=${repository}
                   PARENT_REPO=$(echo "$REPO_INFO" | jq -r '.parent.full_name')
                   while [[ -n "$PARENT_REPO" ]]; do
+                    echo "temp $PARENT_REPO"
                     OUTPUT=${PARENT_REPO}
                     PARENT_REPO_INFO=$(gh api "/repos/${OUTPUT}")
                     PARENT_REPO=$(echo "$PARENT_REPO_INFO" | jq -r '.parent.full_name')
