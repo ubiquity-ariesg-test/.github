@@ -66,11 +66,12 @@ jobs:
                 
                 for repository in "${REPOSITORIES[@]}"; do
                   REPO_INFO=$(gh api "/repos/${repository}")
-                  git clone https://github.com/${repository}
+                  git clone https://github.com/${repository} to-synced
                   if [[ "$(echo "$REPO_INFO" | jq -r '.template_repository.full_name')" == "${TEMPLATE_REPO}" ]]; then
                     REPO_NAME=$(echo "$REPO_INFO" | jq -rc '.full_name')
                     ALL_REPOSITORIES+=("${REPO_NAME}")
-                  fi              
+                  fi
+                  rm -rf to-synced              
                 done
 
                 ((PAGE++))
