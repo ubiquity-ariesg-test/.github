@@ -132,7 +132,7 @@ jobs:
         env:
           JSON_STRING: ${{ steps.config.outputs.repositories }}
 
-  run-matrix:
+  sync-repositories:
     needs: prepare
     strategy:
       matrix: 
