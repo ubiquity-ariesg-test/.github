@@ -76,8 +76,8 @@ jobs:
                   fi
 
                   # Check if the repo is forked from template
-                  output_clone=$(echo "$repository" | sed 's/\//_/g')
-                  git clone ${repository} ${output_clone}
+                  output_clone=$(echo "${repository}" | sed 's/\//_/g')
+                  git clone https://github.com/${repository} ${output_clone}
 
                   cd ${output_clone}
                   git remote add template https://github.com/${TEMPLATE_REPO}
