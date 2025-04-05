@@ -70,8 +70,14 @@ jobs:
                   if [[ "$repository" == "$TEMPLATE_REPO" ]]; then
                     continue
                   fi
-              
+
                   REPO_INFO=$(gh api "/repos/${repository}")
+                  ARCHIVED=$(echo "$REPO_INFO" | jq -r '.archived')
+                  DISABLED=$(echo "$REPO_INFO" | jq -r '.disabled')
+                  if [[ "$ARCHIVED" == "true" || "$DISABLED" == "true" ]]; then
+                    continue
+                  fi
+              
                   OUTPUT=${repository}
                   PARENT_REPO=$(echo "$REPO_INFO" | jq -r '.parent.full_name')
                   while [[ "$PARENT_REPO" != "null" ]]; do
@@ -95,11 +101,9 @@ jobs:
                   git clone https://github.com/${repository} ${output_clone}
 
                   cd ${output_clone}
-                  git fetch origin
-                  git branch
-                  git status
+                  git fetch -q origin
                   git remote add template https://github.com/${TEMPLATE_REPO}
-                  git fetch template
+                  git fetch -q template
 
                   if [[ $(git merge-base ${TARGET_BRANCH} template/${TEMPLATE_BRANCH}) ]]; then
                     REPO_NAME=$(echo "$REPO_INFO" | jq -rc '.full_name')
