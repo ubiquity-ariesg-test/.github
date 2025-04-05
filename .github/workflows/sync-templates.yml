@@ -76,7 +76,7 @@ jobs:
                   fi
 
                   # Check if the repo is forked from template
-                  output_clone=$(echo "$repository" | sed -i 's/\//_/g')
+                  output_clone=$(echo "$repository" | sed 's/\//_/g')
                   git clone ${repository} ${output_clone}
 
                   cd ${output_clone}
