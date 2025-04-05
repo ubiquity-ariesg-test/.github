@@ -75,7 +75,7 @@ jobs:
                   PARENT_REPO=$(echo "$REPO_INFO" | jq -r '.parent.full_name')
                   while [[ -n "$PARENT_REPO" ]]; do
                     OUTPUT=${PARENT_REPO}
-                    PARENT_REPO_INFO=$(gh api "/repos/${repository}")
+                    PARENT_REPO_INFO=$(gh api "/repos/${OUTPUT}")
                     PARENT_REPO=$(echo "$PARENT_REPO_INFO" | jq -r '.parent.full_name')
                   done
 
