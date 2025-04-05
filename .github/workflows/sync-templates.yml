@@ -81,6 +81,8 @@ jobs:
 
                   cd ${output_clone}
                   git fetch origin
+                  git branch
+                  git status
                   git remote add template https://github.com/${TEMPLATE_REPO}
                   git fetch template
 
