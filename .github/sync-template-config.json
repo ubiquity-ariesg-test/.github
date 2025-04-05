@@ -4,7 +4,6 @@
     "target_branch": "development",
     "ai_model": "anthropic/claude-3.7-sonnet",
     "organizations": [
-        "ubiquity",
         "ariesgun"
     ],
     "repositories": [
