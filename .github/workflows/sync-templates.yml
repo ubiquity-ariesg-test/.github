@@ -50,6 +50,7 @@ jobs:
               PAGE=1
               PER_PAGE=100
               while true; do
+                echo "ORG: $organization"
                 LIST_REPOS=$(gh api "/orgs/${organization}/repos?per_page=${PER_PAGE}&page=${PAGE}")
                 
                 # Break the loop if the response is not a list
@@ -74,6 +75,8 @@ jobs:
                   if [[ "$repository" == "$TEMPLATE_REPO" ]]; then
                     continue
                   fi
+
+                  echo "REPO: $repository"
 
                   REPO_INFO=$(gh api "/repos/${repository}")
 
