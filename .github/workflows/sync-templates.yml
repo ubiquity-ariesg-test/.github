@@ -103,7 +103,7 @@ jobs:
 
                   # Check if the repo can be synced using git merge-base.
                   output_clone=$(echo "${repository}" | sed 's/\//_/g')
-                  git clone -q https://github.com/${repository} ${output_clone}
+                  git clone https://github.com/${repository} ${output_clone}
 
                   cd ${output_clone}
                   git fetch -q origin
