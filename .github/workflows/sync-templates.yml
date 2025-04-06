@@ -77,11 +77,12 @@ jobs:
 
                   REPO_INFO=$(gh api "/repos/${repository}")
 
-                  # Skip if the repository is disabled or archived
+                  # Skip if the repository is disabled, archived, private, or a template
                   ARCHIVED=$(echo "$REPO_INFO" | jq -r '.archived')
                   DISABLED=$(echo "$REPO_INFO" | jq -r '.disabled')
+                  PRIVATE=$(echo "$REPO_INFO" | jq -r '.private')
                   IS_TEMPLATE=$(echo "$REPO_INFO" | jq -r '.is_template')
-                  if [[ "$ARCHIVED" == "true" || "$DISABLED" == "true" || "$IS_TEMPLATE" == "true" ]]; then
+                  if [[ "$ARCHIVED" == "true" || "$DISABLED" == "true" || "$PRIVATE" == "true" || "$IS_TEMPLATE" == "true" ]]; then
                     continue
                   fi
               
