@@ -83,6 +83,7 @@ async function resolveMergeConflict() {
   });
 
   if (!response.choices || response.choices.length === 0) {
+    console.error(response);
     throw new Error("Error: Received an empty response from the API.");
   }
 
